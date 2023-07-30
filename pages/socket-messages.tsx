@@ -1,16 +1,29 @@
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import io, { Socket } from 'socket.io-client';
+import {getToken} from '../utils/user/token';
+import { useJwtContext } from './_app';
+
 
 const ChatPage = () => {
   const [msg, setMsg] = useState<string[]>([]);
   const [socket, setSocket] = useState<Socket>(null);
+  const { jwtToken } = useJwtContext();
 
+  useEffect(
+    () => {connectSocket();}, 
+  [jwtToken]);
+  
   const messageInput = useRef(null);
 
   const connectSocket = async () => {
     if(socket?.connected) return;
+    console.log('token: ', jwtToken);
 
-    const newSocket = io('ws://localhost:3131');
+    const newSocket = io('ws://localhost:3131', {
+      extraHeaders: {
+        Authorization: `Bearer ${jwtToken}`,
+      }
+    });
 
     newSocket.on('connected', () => {
         console.log('connected');
@@ -42,7 +55,6 @@ const ChatPage = () => {
   };
 
 
-  useEffect(() => {connectSocket();}, []);
 
   const sendButtonHandler = () => {
     const text = messageInput.current.value;
