@@ -4,7 +4,7 @@ import { AppProps } from 'next/app';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { getToken } from '../utils/user/token';
 
-const JwtTokenContext = createContext<{jwtToken: string}>(null);
+export const JwtTokenContext = createContext(null);
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
     const [jwtToken, setJwtToken] = useState('');

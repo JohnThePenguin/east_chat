@@ -1,13 +1,12 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import io, { Socket } from 'socket.io-client';
-import {getToken} from '../utils/user/token';
-import { useJwtContext } from './_app';
+import { JwtTokenContext } from './_app';
 
 
 const ChatPage = () => {
   const [msg, setMsg] = useState<string[]>([]);
   const [socket, setSocket] = useState<Socket>(null);
-  const { jwtToken } = useJwtContext();
+  const { jwtToken } = useContext(JwtTokenContext);
 
   useEffect(
     () => {connectSocket();}, 
